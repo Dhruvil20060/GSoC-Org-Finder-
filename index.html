@@ -612,7 +612,7 @@
         <span class="material-symbols-outlined text-zinc-600">menu</span>
       </button>
       
-      <a href="#" class="flex items-center gap-2">
+      <a href="#timeline" class="flex items-center gap-2" id="logoLink">
         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-container flex items-center justify-center flex-shrink-0">
           <span class="text-white font-bold text-sm">G</span>
         </div>
@@ -1564,19 +1564,25 @@
     const sections = ['orgs', 'guide', 'watchlist', 'issues', 'mentors', 'timeline', 'ai-recommender'];
     const scrollPosition = window.scrollY + 100; // Offset for fixed header
     
-    let currentSection = 'orgs'; // Default
-    
-    sections.forEach(sectionId => {
-      const section = document.getElementById(sectionId);
-      if (section) {
+let currentSection = 'timeline';
+
+sections.forEach(sectionId => {
+    const section = document.getElementById(sectionId);
+
+    if (section) {
         const sectionTop = section.offsetTop;
         const sectionBottom = sectionTop + section.offsetHeight;
-        
-        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-          currentSection = sectionId;
+
+        const triggerPoint = window.innerHeight / 2;
+
+        if (
+            sectionTop <= scrollPosition + triggerPoint &&
+            sectionBottom > scrollPosition + triggerPoint
+        ) {
+            currentSection = sectionId;
         }
-      }
-    });
+    }
+});
     
     // Update mobile menu items
     const allMobileLinks = document.querySelectorAll('.mobile-menu-link');
@@ -3684,6 +3690,47 @@ document.addEventListener('DOMContentLoaded', () => {
 <script src="src/js/skillExtractor.js"></script>
 <script src="src/js/recommender.js"></script>
 <script src="src/js/recommendation-ui.js"></script>
+
+<script>
+document.getElementById("logoLink").addEventListener("click", function (e) {
+  e.preventDefault();
+
+  // Scroll to timeline section
+  document.getElementById("timeline").scrollIntoView({
+    behavior: "smooth"
+  });
+
+  // Remove active classes from all nav links
+  document.querySelectorAll(".desktop-nav-link").forEach(link => {
+    link.classList.remove(
+      "text-orange-600",
+      "font-bold",
+      "border-b-2",
+      "border-orange-600"
+    );
+
+    link.classList.add(
+      "text-zinc-600"
+    );
+  });
+
+  // Activate Timeline nav link
+  const timelineLink = document.querySelector(
+    '.desktop-nav-link[href="#timeline"]'
+  );
+
+  if (timelineLink) {
+    timelineLink.classList.remove("text-zinc-600");
+
+    timelineLink.classList.add(
+      "text-orange-600",
+      "font-bold",
+      "border-b-2",
+      "border-orange-600"
+    );
+  }
+});
+</script>
 
 </body>
 </html>
